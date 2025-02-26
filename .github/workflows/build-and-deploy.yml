@@ -1,0 +1,67 @@
+name: 构建并部署到腾讯云对象存储
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '部署环境 (dev/test/prod)'
+        required: true
+        default: 'dev'
+      version:
+        description: '版本号'
+        required: false
+        default: 'latest'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: 设置 pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7
+          run_install: false
+          
+      - name: 获取 pnpm 缓存路径
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+          
+      - name: 设置 pnpm 缓存
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: 安装依赖
+        run: pnpm install
+      
+      - name: 构建项目
+        run: |
+          echo "构建环境: ${{ github.event.inputs.environment }}"
+          echo "版本号: ${{ github.event.inputs.version }}"
+          pnpm run build
+        env:
+          NODE_ENV: ${{ github.event.inputs.environment }}
+          
+      # - name: 部署到腾讯云对象存储
+      #   uses: TencentCloud/cos-action@v1
+      #   with:
+      #     secret_id: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
+      #     secret_key: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
+      #     cos_bucket: ${{ secrets.COS_BUCKET }}
+      #     cos_region: ${{ secrets.COS_REGION }}
+      #     local_path: 'dist' # Vite 的默认输出目录
+      #     remote_path: '${{ github.event.inputs.environment }}/${{ github.event.inputs.version }}'
+      #     clean: true # 清理目标路径中的文件
