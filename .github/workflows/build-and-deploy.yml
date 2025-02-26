@@ -51,7 +51,7 @@ jobs:
         run: |
           echo "构建环境: ${{ github.event.inputs.environment }}"
           echo "版本号: ${{ github.event.inputs.version }}"
-          pnpm run build
+          pnpm i -g @slidev/cli
         env:
           NODE_ENV: ${{ github.event.inputs.environment }}
           

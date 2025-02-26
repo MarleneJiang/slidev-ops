@@ -1,7 +1,11 @@
-require('dotenv').config();
-const express = require('express');
-const { Octokit } = require('@octokit/rest');
-const bodyParser = require('body-parser');
+import { Octokit } from '@octokit/rest';
+import dotenv from 'dotenv';
+// const express = require('express');
+// const bodyParser = require('body-parser');
+import express from 'express';
+import bodyParser from 'body-parser';
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
