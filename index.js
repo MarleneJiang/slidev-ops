@@ -40,7 +40,7 @@ app.post('/api/trigger-workflow', async (req, res) => {
       ref, // 分支名
       inputs:{
         ...inputs,
-        requestId
+        request_id: requestId // 传递给工作流的参数
       } // 传递给工作流的参数
     });
     
