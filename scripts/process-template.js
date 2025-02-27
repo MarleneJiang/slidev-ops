@@ -12,7 +12,7 @@ function processTemplate() {
   const title = process.env.TITLE || '演示文稿';
   const contentString = lzString.decompressFromEncodedURIComponent(process.env.CONTENT || '') || `# ${title}\n\n演示文稿内容\n\n环境: ${environment}\n版本: ${version}`;
   
-  console.log(`处理模板: 环境=${environment}, 版本=${version}, 请求ID=${requestId}`,process.env.CONTENT || '');
+  console.log(`处理模板: 环境=${environment}, 版本=${version}, 请求ID=${requestId}`, contentString);
   
   // 读取模板文件
   const templatePath = path.resolve(process.cwd(), 'slides.md');
