@@ -2,6 +2,8 @@ import { Octokit } from '@octokit/rest';
 import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
+// uuid
+import { v4 as uuidv4 } from 'uuid';
 
 dotenv.config();
 
@@ -19,13 +21,16 @@ const octokit = new Octokit({
 // 触发工作流的API端点
 app.post('/api/trigger-workflow', async (req, res) => {
   try {
-    const { ref = 'main', inputs } = req.body;
+    const { ref = 'main', inputs={} } = req.body;
     
-    if (!inputs) {
+    if (!inputs || Object.keys(inputs).length === 0) {
       return res.status(400).json({ error: '缺少必要的参数' });
     }
 
     console.log('触发工作流，参数:', inputs);
+
+    const requestId = uuidv4();
+    console.log(`请求ID: ${requestId}`);
 
     // 触发 workflow
     await octokit.actions.createWorkflowDispatch({
@@ -33,7 +38,10 @@ app.post('/api/trigger-workflow', async (req, res) => {
       repo: process.env.GITHUB_REPO,
       workflow_id: 'build-and-deploy.yml', // 你的工作流文件名
       ref, // 分支名
-      inputs // 传递给工作流的参数
+      inputs:{
+        ...inputs,
+        requestId
+      } // 传递给工作流的参数
     });
     
     // 等待几秒，确保工作流已经开始运行

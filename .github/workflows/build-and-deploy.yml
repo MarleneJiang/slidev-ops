@@ -39,7 +39,7 @@ jobs:
       - name: 设置 Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'  # 升级到更新的Node.js版本
 
       - name: 设置 pnpm
         uses: pnpm/action-setup@v2
@@ -72,6 +72,8 @@ jobs:
           
       - name: 处理模板文件
         run: |
+          # 确保脚本运行在正确的Node环境中
+          export NODE_ENV="${{ github.event.inputs.environment }}"
           node scripts/process-template.js
         env:
           ENVIRONMENT: ${{ github.event.inputs.environment }}
@@ -89,6 +91,12 @@ jobs:
           fi
           
           echo "使用base路径: /$REQUEST_ID/"
+          
+          # 设置正确的NODE_ENV和其他可能需要的环境变量
+          export NODE_ENV="${{ github.event.inputs.environment }}"
+          export NODE_OPTIONS="--max-old-space-size=4096"
+          
+          # 执行构建命令
           slidev build --base "/$REQUEST_ID/"
           
           # 显示构建结果
