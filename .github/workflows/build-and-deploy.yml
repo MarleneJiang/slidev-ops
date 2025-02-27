@@ -5,7 +5,7 @@ on:
     inputs:
       environment:
         description: '部署环境 (dev/test/prod)'
-        required: true
+        required: false
         default: 'dev'
       version:
         description: '版本号'
@@ -14,6 +14,13 @@ on:
       request_id:
         description: '请求唯一标识符'
         required: false
+      title:
+        description: '演示文稿标题'
+        required: true
+        default: 'Slidev演示文稿'
+      content:
+        description: '演示文稿内容'
+        required: true
 
 jobs:
   build-and-deploy:
@@ -27,6 +34,7 @@ jobs:
           echo "环境: ${{ github.event.inputs.environment }}"
           echo "版本: ${{ github.event.inputs.version }}"
           echo "请求ID: ${{ github.event.inputs.request_id }}"
+          echo "标题: ${{ github.event.inputs.title }}"
 
       - name: 设置 Node.js
         uses: actions/setup-node@v3
@@ -54,15 +62,37 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: 安装依赖
-        run: pnpm install
-      
-      - name: 构建项目
         run: |
           echo "构建环境: ${{ github.event.inputs.environment }}"
           echo "版本号: ${{ github.event.inputs.version }}"
+          pnpm install
           pnpm i -g @slidev/cli
         env:
           NODE_ENV: ${{ github.event.inputs.environment }}
+          
+      - name: 处理模板文件
+        run: |
+          node scripts/process-template.js
+        env:
+          ENVIRONMENT: ${{ github.event.inputs.environment }}
+          VERSION: ${{ github.event.inputs.version }}
+          REQUEST_ID: ${{ github.event.inputs.request_id }}
+          TITLE: ${{ github.event.inputs.title }}
+          CONTENT: ${{ github.event.inputs.content }}
+          
+      - name: 构建Slidev
+        run: |
+          # 使用request_id作为base路径
+          REQUEST_ID="${{ github.event.inputs.request_id }}"
+          if [ -z "$REQUEST_ID" ]; then
+            REQUEST_ID="default"
+          fi
+          
+          echo "使用base路径: /$REQUEST_ID/"
+          slidev build --base "/$REQUEST_ID/"
+          
+          # 显示构建结果
+          ls -la dist
           
       # - name: 部署到腾讯云对象存储
       #   uses: TencentCloud/cos-action@v1
