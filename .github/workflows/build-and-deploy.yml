@@ -85,7 +85,7 @@ jobs:
       - name: 构建Slidev
         run: |
           # 使用request_id作为base路径
-          REQUEST_ID="${{ github.event.inputs.request_id }}"
+          REQUEST_ID="${{ github.event.inputs.environment }}/${{ github.event.inputs.request_id }}"
           if [ -z "$REQUEST_ID" ]; then
             REQUEST_ID="default"
           fi
