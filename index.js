@@ -61,7 +61,8 @@ app.post('/api/trigger-workflow', async (req, res) => {
       message: '工作流已成功触发',
       run_id: latestRun.id,
       status_url: `/api/workflow-status/${latestRun.id}`,
-      html_url: latestRun.html_url
+      html_url: latestRun.html_url,
+      request_id: requestId
     });
     
   } catch (error) {
