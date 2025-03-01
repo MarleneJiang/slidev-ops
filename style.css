@@ -133,3 +133,7 @@ h6 {
   color: rgb(201, 158, 251);
   background: #161616ee;
 }
+
+.slidev-layout.cover h1 {
+  font-size: 3rem !important;
+}
