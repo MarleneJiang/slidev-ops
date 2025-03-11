@@ -21,6 +21,13 @@ on:
       content:
         description: '演示文稿内容'
         required: true
+      author:
+        description: '作者'
+        required: false
+        default: 'slidev-parser'
+      args:
+        description: '其他参数'
+        required: false
 
 jobs:
   build-and-deploy:
@@ -81,6 +88,8 @@ jobs:
           REQUEST_ID: ${{ github.event.inputs.request_id }}
           TITLE: ${{ github.event.inputs.title }}
           CONTENT: ${{ github.event.inputs.content }}
+          AUTHOR: ${{ github.event.inputs.author }}
+          ARGS: ${{ github.event.inputs.args }}
           
       - name: 构建Slidev
         run: |
