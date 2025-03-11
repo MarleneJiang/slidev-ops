@@ -96,7 +96,7 @@ function processTemplate() {
     const author = process.env.AUTHOR || 'slidev-parser';
     const requestId = process.env.REQUEST_ID || '';
     const title = process.env.TITLE || '演示文稿';
-    const args = JSON.parse(lzString.decompressFromEncodedURIComponent(process.env.ARGS || '')) || '{}';
+    const args = JSON.parse(lzString.decompressFromEncodedURIComponent(process.env.ARGS || '') || '{}');
     const contentString = lzString.decompressFromEncodedURIComponent(process.env.CONTENT || '') || `# ${title}\n\n演示文稿内容\n\n环境: ${environment}\n版本: ${version}`;
 
     console.log(`处理模板: 环境=${environment}, 版本=${version}, 请求ID=${requestId}, 作者=${author}`, contentString);
