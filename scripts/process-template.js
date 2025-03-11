@@ -26,7 +26,8 @@ function generateSlidesMd(options) {
     mdc: true,
     lang: "zh-CN",
     layout: "intro",
-    glowSeed: 4
+    glowSeed: 4,
+    routerMode: "hash"
   };
 
   // 合并默认配置与用户提供的配置
