@@ -19,6 +19,7 @@ function generateSlidesMd(options) {
 
   // 默认配置
   const defaultConfig = {
+    title,
     highlighter: "shiki",
     css: "unocss",
     colorSchema: "dark",
@@ -73,7 +74,7 @@ function generateSlidesMd(options) {
   });
 
   // 特别处理标题（如果有占位符）
-  yamlFrontMatter = yamlFrontMatter.replace('"{{title}}"', '"' + title + '"');
+  // yamlFrontMatter = yamlFrontMatter.replace('"{{title}}"', '"' + title + '"');
 
   // 添加忽略包列表
   yamlFrontMatter += 'monacoTypesIgnorePackages:\n';
