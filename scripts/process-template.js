@@ -113,7 +113,7 @@ function processTemplate() {
 
     // 写回文件
     fs.writeFileSync(templatePath, slidesContent, 'utf-8');
-    console.log('模板处理完成');
+    console.log('模板处理完成', slidesContent);
   } catch (error) {
     console.error('处理模板时出错:', error);
   }
