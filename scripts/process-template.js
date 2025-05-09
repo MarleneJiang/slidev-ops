@@ -22,13 +22,14 @@ function generateSlidesMd(options) {
     title,
     highlighter: "shiki",
     css: "unocss",
-    colorSchema: "dark",
+    colorSchema: "light",
     transition: "fade-out",
     mdc: true,
     lang: "zh-CN",
     layout: "intro",
     glowSeed: 4,
-    routerMode: "hash"
+    routerMode: "hash",
+    info: "slidev-parser自动生成"
   };
 
   // 合并默认配置与用户提供的配置
