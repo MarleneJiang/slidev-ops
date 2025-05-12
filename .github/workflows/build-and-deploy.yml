@@ -115,7 +115,8 @@ jobs:
             echo "导出为 PPTX: ./dist/$REQUEST_ID_BASE.pptx"
             # 确保dist目录存在
             mkdir -p ./dist
-            slidev export --format pptx --with-clicks --output "./dist/${{ github.event.inputs.request_id }}.pptx" --timeout 60000
+            slidev export --with-clicks --format pptx --timeout 60000
+            slidev export --with-clicks --format pptx --output "./dist/${{ github.event.inputs.request_id }}.pptx" --timeout 60000
           else
             echo "构建 Web 版本，使用base路径: /$REQUEST_ID_BASE/"
             slidev build --base "/$REQUEST_ID_BASE/"
