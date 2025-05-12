@@ -81,6 +81,7 @@ jobs:
           pnpm i -g @slidev/cli
           if [ "${{ github.event.inputs.type }}" == "pptx" ]; then
             npx playwright install
+          fi
         env:
           NODE_ENV: ${{ github.event.inputs.environment }}
           
