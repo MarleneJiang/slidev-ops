@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import lzString from 'lz-string'
 
 /**
@@ -64,7 +64,7 @@ function generateSlidesMd(options) {
   let yamlFrontMatter = '---\n';
 
   // 添加基本配置
-  Object.entries(mergedConfig).forEach(([key, value]) => {
+  for (const [key, value] of Object.entries(mergedConfig)) {
     if (key === 'title') {
       yamlFrontMatter += `${key}: "${value}"\n`;
     } else if (typeof value === 'boolean' || typeof value === 'number') {
@@ -72,16 +72,16 @@ function generateSlidesMd(options) {
     } else {
       yamlFrontMatter += `${key}: "${value}"\n`;
     }
-  });
+  }
 
   // 特别处理标题（如果有占位符）
   // yamlFrontMatter = yamlFrontMatter.replace('"{{title}}"', '"' + title + '"');
 
   // 添加忽略包列表
   yamlFrontMatter += 'monacoTypesIgnorePackages:\n';
-  ignorePackages.forEach(pkg => {
+  for (const pkg of ignorePackages) {
     yamlFrontMatter += `  - "${pkg}"\n`;
-  });
+  }
 
   yamlFrontMatter += '---\n\n';
 

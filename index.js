@@ -106,8 +106,8 @@ app.get('/api/workflow-runs', async (req, res) => {
       owner: process.env.GITHUB_OWNER,
       repo: process.env.GITHUB_REPO,
       workflow_id: 'build-and-deploy.yml',
-      page: parseInt(page),
-      per_page: parseInt(per_page)
+      page: Number.parseInt(page),
+      per_page: Number.parseInt(per_page)
     });
     
     res.status(200).json({

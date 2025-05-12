@@ -25,6 +25,10 @@ on:
         description: '作者'
         required: false
         default: 'slidev-parser'
+      type:
+        description: '输出类型 (web/pptx)'
+        required: false
+        default: 'web'
       args:
         description: '其他参数'
         required: false
@@ -40,6 +44,7 @@ jobs:
         run: |
           echo "环境: ${{ github.event.inputs.environment }}"
           echo "版本: ${{ github.event.inputs.version }}"
+          echo "请求类型: ${{ github.event.inputs.type }}"
           echo "请求ID: ${{ github.event.inputs.request_id }}"
           echo "标题: ${{ github.event.inputs.title }}"
 
@@ -74,6 +79,8 @@ jobs:
           echo "版本号: ${{ github.event.inputs.version }}"
           pnpm install
           pnpm i -g @slidev/cli
+          if [ "${{ github.event.inputs.type }}" == "pptx" ]; then
+            npx playwright install
         env:
           NODE_ENV: ${{ github.event.inputs.environment }}
           
@@ -93,20 +100,25 @@ jobs:
           
       - name: 构建Slidev
         run: |
-          # 使用request_id作为base路径
-          REQUEST_ID="${{ github.event.inputs.environment }}/${{ github.event.inputs.request_id }}"
-          if [ -z "$REQUEST_ID" ]; then
-            REQUEST_ID="default"
+          # 使用request_id作为base路径或文件名
+          REQUEST_ID_BASE="${{ github.event.inputs.environment }}/${{ github.event.inputs.request_id }}"
+          if [ -z "$REQUEST_ID_BASE" ]; then
+            REQUEST_ID_BASE="default"
           fi
-          
-          echo "使用base路径: /$REQUEST_ID/"
           
           # 设置正确的NODE_ENV和其他可能需要的环境变量
           export NODE_ENV="${{ github.event.inputs.environment }}"
           export NODE_OPTIONS="--max-old-space-size=4096"
-          
-          # 执行构建命令
-          slidev build --base "/$REQUEST_ID/"
+
+          if [ "${{ github.event.inputs.type }}" == "pptx" ]; then
+            echo "导出为 PPTX: ./dist/$REQUEST_ID_BASE.pptx"
+            # 确保dist目录存在
+            mkdir -p ./dist
+            slidev export --format pptx --with-clicks --output "./dist/${{ github.event.inputs.request_id }}.pptx" --timeout 60000
+          else
+            echo "构建 Web 版本，使用base路径: /$REQUEST_ID_BASE/"
+            slidev build --base "/$REQUEST_ID_BASE/"
+          fi
           
           # 显示构建结果
           ls -la dist

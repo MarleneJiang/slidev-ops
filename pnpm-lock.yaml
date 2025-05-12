@@ -29,6 +29,9 @@ importers:
       lz-string:
         specifier: ^1.5.0
         version: 1.5.0
+      playwright-chromium:
+        specifier: ^1.52.0
+        version: 1.52.0
       seedrandom:
         specifier: ^3.0.5
         version: 3.0.5
@@ -434,6 +437,16 @@ packages:
   picomatch@2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
+
+  playwright-chromium@1.52.0:
+    resolution: {integrity: sha512-ZTpzBzRFFRglyqRnAqdK5mFaw1P41qe8V2zSR+fA0eKPgGEEaH7r91ejXKijs3WhReatRcatHQe3ndMBMN1PLA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright-core@1.52.0:
+    resolution: {integrity: sha512-l2osTgLXSMeuLZOML9qYODUQoPPnUsKsb5/P6LJ2e6uPKXUdPK5WYhN4z03G+YNbWmGDY4YENauNu4ZKczreHg==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   prism-theme-vars@0.2.5:
     resolution: {integrity: sha512-/D8gBTScYzi9afwE6v3TC1U/1YFZ6k+ly17mtVRdLpGy7E79YjJJWkXFgUDHJ2gDksV/ZnXF7ydJ4TvoDm2z/Q==}
@@ -964,6 +977,12 @@ snapshots:
   path-to-regexp@0.1.12: {}
 
   picomatch@2.3.1: {}
+
+  playwright-chromium@1.52.0:
+    dependencies:
+      playwright-core: 1.52.0
+
+  playwright-core@1.52.0: {}
 
   prism-theme-vars@0.2.5: {}
 

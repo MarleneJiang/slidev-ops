@@ -30,6 +30,7 @@ export type Distribution =
   | 'bottom-right'
   | 'center'
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const formatter = computed(() => (currentSlideRoute.value.meta?.slide as any)?.frontmatter || {})
 const distribution = computed(() => (formatter.value.glow || 'full') as Distribution)
 const opacity = computed<number>(() => +(formatter.value.glowOpacity || 0.4))
